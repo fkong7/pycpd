@@ -21,6 +21,7 @@ def main():
     X2 = np.ones((fish_target.shape[0], fish_target.shape[1] + 1))
     X2[:,:-1] = fish_target
     X = np.vstack((X1, X2))
+    print(X)
 
     fish_source = np.loadtxt('data/fish_source.txt')
     Y1 = np.zeros((fish_source.shape[0], fish_source.shape[1] + 1))
@@ -28,6 +29,7 @@ def main():
     Y2 = np.ones((fish_source.shape[0], fish_source.shape[1] + 1))
     Y2[:,:-1] = fish_source
     Y = np.vstack((Y1, Y2))
+    print(Y)
 
     fig = plt.figure()
     ax = fig.add_subplot(111, projection='3d')

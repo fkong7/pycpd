@@ -42,9 +42,9 @@ class expectation_maximization_registration(object):
         self.q = -self.err - self.N * self.D/2 * np.log(self.sigma2)
         while self.iteration < self.max_iterations and self.err > self.tolerance:
             self.iterate()
-            if callable(callback):
-                kwargs = {'iteration': self.iteration, 'error': self.err, 'X': self.X, 'Y': self.TY}
-                callback(**kwargs)
+            #if callable(callback):
+            #    kwargs = {'iteration': self.iteration, 'error': self.err, 'X': self.X, 'Y': self.TY}
+            #    callback(**kwargs)
 
         return self.TY, self.get_registration_parameters()
 
