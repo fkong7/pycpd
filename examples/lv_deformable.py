@@ -42,8 +42,8 @@ def main():
     rank = comm.Get_rank()
     total = comm.Get_size()
     
-    fns = glob.glob(os.path.join(args.input, '*.npy'))
-    
+    fns = sorted(glob.glob(os.path.join(args.input, '*.npy')))
+    print("Template: ", fns[0])
     num_vol_per_core = int(np.floor(len(fns)/total))
     extra = len(fns) % total
     vol_ids = list(range(rank*num_vol_per_core,(rank+1)*num_vol_per_core))
@@ -51,8 +51,8 @@ def main():
         vol_ids.append(len(fns)-1-rank)
 
     for i in vol_ids:
-        fn_X = fns[0]
-        fn_Y = fns[i]
+        fn_X = fns[i]
+        fn_Y = fns[0]
         fn_Y_out = os.path.join(args.output, os.path.basename(fn_Y))
         X = np.load(fn_X)
         Y = np.load(fn_Y)
