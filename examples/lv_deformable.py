@@ -54,13 +54,13 @@ def main():
         fn_X = fns[i]
         fn_Y = fns[0]
         fn_X_out = os.path.join(args.output, os.path.basename(fn_X))
-        Y = np.load(fn_X)
-        X = np.load(fn_Y)
+        X = np.load(fn_X)
+        Y = np.load(fn_Y)
         X_mean = np.mean(X, axis=0)
         Y_mean = np.mean(Y, axis=0)
         reg = deformable_registration(**{ 'X': X-X_mean, 'Y': Y-Y_mean})
         TY, _ = reg.register()
-        TY += Y_mean
+        TY += X_mean
         np.save(fn_X_out, TY)
         #writePD('/Users/fanweikong/Downloads/phase9_6.vtk', TY, poly)
 
