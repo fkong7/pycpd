@@ -35,7 +35,7 @@ class expectation_maximization_registration(object):
         self.P1             = np.zeros((self.M, ))
         self.Np             = 0
 
-    def register(self, callback=lambda **kwargs: None):
+    def register(self, callback=lambda **kwargs: None, rank=0):
         self.transform_point_cloud()
         if self.sigma2 is None:
             self.sigma2 = initialize_sigma2(self.X, self.TY)
@@ -45,6 +45,8 @@ class expectation_maximization_registration(object):
             #if callable(callback):
             #    kwargs = {'iteration': self.iteration, 'error': self.err, 'X': self.X, 'Y': self.TY}
             #    callback(**kwargs)
+            if rank==1:
+                print("Iteration, error: ", self.iteration, self.err)
 
         return self.TY, self.get_registration_parameters()
 

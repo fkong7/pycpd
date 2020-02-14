@@ -59,7 +59,7 @@ def main():
         X_mean = np.mean(X, axis=0)
         Y_mean = np.mean(Y, axis=0)
         reg = deformable_registration(**{ 'X': X-X_mean, 'Y': Y-Y_mean})
-        TY, _ = reg.register()
+        TY, _ = reg.register(rank=rank)
         TY += X_mean
         np.save(fn_X_out, TY)
         #writePD('/Users/fanweikong/Downloads/phase9_6.vtk', TY, poly)
