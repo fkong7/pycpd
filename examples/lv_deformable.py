@@ -3,6 +3,8 @@ import os
 import sys
 sys.path.append(os.path.join(os.path.dirname(__file__), '../pycpd'))
 import glob
+from affine_registration import affine_registration
+from rigid_registration import rigid_registration
 from deformable_registration import deformable_registration
 import numpy as np
 import time
@@ -58,7 +60,15 @@ def main():
         Y = np.load(fn_Y)
         X_mean = np.mean(X, axis=0)
         Y_mean = np.mean(Y, axis=0)
-        reg = deformable_registration(**{ 'X': X-X_mean, 'Y': Y-Y_mean})
+        X -= X_mean
+        Y -= Y_mean
+        reg = rigid_registration(**{'X': X, 'Y': Y})
+        TY, _ = reg.register()
+        reg = affine_registration(**{'X':X, 'Y':Y})
+        TY, _ = reg.register()
+        reg = deformable_registration(**{ 'X': X, 'Y': Y})
+        TY, _ = reg.register(rank=rank)
+        reg = deformable_registration(**{ 'X': X, 'Y': Y})
         TY, _ = reg.register(rank=rank)
         TY += X_mean
         np.save(fn_X_out, TY)
