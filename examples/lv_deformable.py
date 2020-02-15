@@ -63,11 +63,11 @@ def main():
         X -= X_mean
         Y -= Y_mean
         reg = rigid_registration(**{'X': X, 'Y': Y})
-        TY, _ = reg.register()
+        Y, _ = reg.register()
         reg = affine_registration(**{'X':X, 'Y':Y})
-        TY, _ = reg.register()
+        Y, _ = reg.register()
         reg = deformable_registration(**{ 'X': X, 'Y': Y})
-        TY, _ = reg.register(rank=rank)
+        Y, _ = reg.register(rank=rank)
         reg = deformable_registration(**{ 'X': X, 'Y': Y})
         TY, _ = reg.register(rank=rank)
         TY += X_mean
