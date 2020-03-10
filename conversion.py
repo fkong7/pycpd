@@ -16,7 +16,10 @@ def parse():
     return args
 
 def readVTK(fn):
-    reader = vtk.vtkXMLPolyDataReader()
+    if fn.split('.')[-1] == 'vtp':
+        reader = vtk.vtkXMLPolyDataReader()
+    elif fn.split('.')[-1] == 'vtk':
+        reader = vtk.vtkPolyDataReader()
     reader.SetFileName(fn)
     reader.Update()
     poly = cleanPolyData(reader.GetOutput(), 0.)
@@ -62,7 +65,7 @@ if __name__ == '__main__':
             out_fn = os.path.join(args.output, os.path.splitext(os.path.basename(fn))[0] + '.vtp')
             writeVTK(out_fn, np.load(fn),poly)
     else:
-        fns = glob.glob(os.path.join(args.input, '*.vtp'))
+        fns = glob.glob(os.path.join(args.input, '*.vtp'))+ glob.glob(os.path.join(args.input, '*.vtk'))
         for fn in fns:
             print(fn)
             coords, poly = readVTK(fn)
