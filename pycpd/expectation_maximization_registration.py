@@ -8,6 +8,7 @@ def initialize_sigma2(X, Y):
     XX = np.tile(XX, (M, 1, 1))
     YY = np.tile(YY, (1, N, 1))
     diff = XX - YY
+    print(XX.shape)
     err  = np.multiply(diff, diff)
     return np.sum(err) / (D * M * N)
 
@@ -40,6 +41,8 @@ class expectation_maximization_registration(object):
         if self.sigma2 is None:
             self.sigma2 = initialize_sigma2(self.X, self.TY)
         self.q = -self.err - self.N * self.D/2 * np.log(self.sigma2)
+        print(rank)
+        print("end")
         while self.iteration < self.max_iterations and self.err > self.tolerance:
             self.iterate()
             #if callable(callback):

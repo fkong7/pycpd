@@ -22,7 +22,8 @@ def readVTK(fn):
         reader = vtk.vtkPolyDataReader()
     reader.SetFileName(fn)
     reader.Update()
-    poly = cleanPolyData(reader.GetOutput(), 0.)
+    #poly = cleanPolyData(reader.GetOutput(), 0.)
+    poly = reader.GetOutput()
     coords = vtk_to_numpy(poly.GetPoints().GetData())
     print(coords.shape)
     return coords, poly
@@ -55,8 +56,23 @@ def writeVTK(fn, pts, poly):
     writer.Update()
     writer.Write()
 
+def compute_mean(fns):
+    """
+    Compute mean of the coordinates of all stored point clouds
+    fns: name of the files storing the aligned numpy arrays
+    """
+    mean_coords = np.zeros(np.load(fns[0]).shape)
+    for fn in fns:
+        mean_coords += np.load(fn)
+    return mean_coords/len(fns)
+
+
 if __name__ == '__main__':
     args = parse()
+    try:
+        os.makedirs(args.output)
+    except Exception as e: print(e)
+
     if args.vtk_template != '':
         _, poly = readVTK(args.vtk_template)
         fns = glob.glob(os.path.join(args.input, '*.npy'))
@@ -64,6 +80,9 @@ if __name__ == '__main__':
             print(fn)
             out_fn = os.path.join(args.output, os.path.splitext(os.path.basename(fn))[0] + '.vtp')
             writeVTK(out_fn, np.load(fn),poly)
+        print("ok")
+        out_fn = os.path.join(args.output, 'mean.vtp')
+        writeVTK(out_fn, compute_mean(fns), poly)
     else:
         fns = glob.glob(os.path.join(args.input, '*.vtp'))+ glob.glob(os.path.join(args.input, '*.vtk'))
         for fn in fns:
